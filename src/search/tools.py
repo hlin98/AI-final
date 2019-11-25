@@ -19,10 +19,7 @@ from graph import canvas
 
 def cell_equal(cell1: (int, int), cell2: (int, int)):
     """
-    比较两个cell是否相同
-    :param cell1:   cell1
-    :param cell2:   cell2
-    :return: True | False
+    returns if the two cells are equal
     """
     if cell1 and not cell2:
         return False
@@ -39,12 +36,13 @@ def cell_equal(cell1: (int, int), cell2: (int, int)):
     return x1 == x2 and y1 == y2
 
 
-def cal_cell_id(cell):
+def cell_coordinates(cell):
     (x, y) = cell
     return f"({x},{y})"
 
 
 def is_adjacent(cell1, cell2):
+    # returns whether or not the cells are neighbors
     (x1, y1) = cell1
     (x2, y2) = cell2
     if x1 == x2 and abs(y1 - y2) == 1:
@@ -54,13 +52,13 @@ def is_adjacent(cell1, cell2):
     return False
 
 
-def adj(cell, mark={}, obstacles=[]):
+def graph(cell, mark={}, obstacles=[]):
     """
-    计算可用邻点
-    :param cell:        坐标
-    :param mark:        已遍历的点
-    :param obstacles:   障碍点
-    :return:            可用邻点
+    parameter meanings:
+        cell: coordinates
+        mark: traversed neighbors
+        param obstacles: obstacle positions
+        return: available neighbors
     """
     (x, y) = cell
     cells = [
@@ -72,19 +70,23 @@ def adj(cell, mark={}, obstacles=[]):
     return filter(valid_cell(mark, obstacles), cells)
 
 
-def cal_path(mark, cell_id):
+def path(mark, cell_id):
     """
-    通过mark计算路径
-    :param mark:        路径树
-    :param cell_id:     终点坐标
-    :return:            路径
+    mark: visited cells
+    cell_id: end position coordinates
+    return: path
+
+    # cell contains last visited neighbor before reaching end position
+    # while there is still a previous neighbor:
+    # set parent_id to be the coordinates of last visited neighbor
+    # if neighbor was already visited then update cell to equal last visited neighbor of parent_id
     """
     path = []
     cell = mark[cell_id]
 
     while cell:
         path.append(cell)
-        parent_id = cal_cell_id(cell)
+        parent_id = cell_coordinates(cell)
         if parent_id in mark.keys():
             cell = mark[parent_id]
         else:
@@ -101,7 +103,7 @@ def valid_cell(mark={}, obstacles=[]):
             return False
         if y < 0 or y >= canvas.HEIGHT:
             return False
-        if cal_cell_id(cell) in mark.keys():
+        if cell_coordinates(cell) in mark.keys():
             return False
         for obstacle in obstacles:
             if cell_equal(cell, obstacle):
@@ -118,4 +120,4 @@ if __name__ == "__main__":
     assert not cell_equal((1, 2), (3, 4))
     assert cell_equal((1, 2), (1, 2))
 
-    print(cal_cell_id((1, 2)))
+    print(cell_coordinates((1, 2)))

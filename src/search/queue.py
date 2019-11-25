@@ -25,11 +25,11 @@ class PriorityQueue:
         self._queue = []
         self._index = 0
 
-    def put(self, item, priority):
+    def push(self, item, priority):
         heapq.heappush(self._queue, (priority, self._index, item))
         self._index += 1
 
-    def get(self):
+    def pop(self):
         if len(self._queue) < 1:
             return None
         return heapq.heappop(self._queue)[-1]
