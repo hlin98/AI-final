@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from search.dfs import cal
+from search.dfs import dfs
 
 from graph import canvas
 
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     input("Press <Enter> to start!")
 
-    path = cal(start, end, obstacles, show_details=True)
+    path = dfs(start, end, obstacles, show_details=True)
     canvas.draw_cell_line(path[:-1], canvas.COLOR.DARK_GRAY.value, canvas.COLOR.RED.value)
     canvas.update()
 
